@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {initialInvoice} from "./constant"
-import {json} from "react-router-dom";
+import { initialInvoice } from "./constant"
+import { json } from "react-router-dom";
+
+
 const InvoiceSlice = createSlice({
   name: "invoiceSlice",
   initialState: {
@@ -11,67 +13,67 @@ const InvoiceSlice = createSlice({
 
   reducers: {
     checkCurrency: (state, action) => {
-      const { key, value,invoiceFormId } = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId)
+      const { key, value, invoiceFormId } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId)
         invoiceElem[key] = value;
-      }else {
+      } else {
         state.invoices[state.invoiceCount][key] = value;
       }
     },
 
     editFieldReducer: (state, action) => {
-      const { name, value,invoiceFormId } = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId)
+      const { name, value, invoiceFormId } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId)
         invoiceElem[name] = value;
-      }else {
+      } else {
         state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
         state.invoices[state.invoiceCount][name] = value;
       }
     },
 
     itemizedItemEditReducer: (state, action) => {
-      const { updatedItems , invoiceFormId} = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId)
+      const { updatedItems, invoiceFormId } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId)
         invoiceElem["items"] = updatedItems;
-      }else {
+      } else {
         state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
         state.invoices[state.invoiceCount]["items"] = updatedItems;
       }
     },
     rowAddReducer: (state, action) => {
-      const { items,invoiceFormId } = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId)
+      const { items, invoiceFormId } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId)
         invoiceElem["items"] = items;
-      }else {
+      } else {
         state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
         state.invoices[state.invoiceCount]["items"] = items;
       }
     },
 
     rowDeleteReducer: (state, action) => {
-      const { updatedItems,invoiceFormId } = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId)
+      const { updatedItems, invoiceFormId } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId)
         invoiceElem["items"] = updatedItems;
-      }else {
+      } else {
         state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
         state.invoices[state.invoiceCount]["items"] = updatedItems;
       }
     },
 
     calculateTotalReducer: (state, action) => {
-      const { subTotal, taxAmount, discountAmount, total,invoiceFormId } = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId)
+      const { subTotal, taxAmount, discountAmount, total, invoiceFormId } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId)
         invoiceElem.subTotal = subTotal;
         invoiceElem.taxAmount = taxAmount;
         invoiceElem.discountAmount = discountAmount;
         invoiceElem.total = total;
-      }else {
+      } else {
         state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
         state.invoices[state.invoiceCount].subTotal = subTotal;
         state.invoices[state.invoiceCount].taxAmount = taxAmount;
@@ -81,13 +83,13 @@ const InvoiceSlice = createSlice({
     },
 
     modalReducer: (state, action) => {
-      const { invoiceFormId,isOpen} = action.payload;
-      if(invoiceFormId){
-        const invoiceElem = state.invoices.find((ele)=> ele.id.toString() === invoiceFormId);
-        if(invoiceElem) {
+      const { invoiceFormId, isOpen } = action.payload;
+      if (invoiceFormId) {
+        const invoiceElem = state.invoices.find((ele) => ele.id.toString() === invoiceFormId);
+        if (invoiceElem) {
           invoiceElem.isOpen = isOpen
         }
-      }else {
+      } else {
         state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
         state.invoices[state.invoiceCount].isOpen = isOpen;
       }
@@ -104,34 +106,50 @@ const InvoiceSlice = createSlice({
     updateInvoiceStateFromStorage: (state, action) => {
       return action.payload
     },
-    editInvoiceReducer:(state,action)=>{
+    editInvoiceReducer: (state, action) => {
       // const {invoiceId}=action.payload;
-      state.EditThisInvoice=action.payload;
+      state.EditThisInvoice = action.payload;
     },
+
+    
 
     saveInvoiceReducer: (state, action) => {
 
-        // Set a new ID for the saved invoice
-        state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
-        state.invoices[state.invoiceCount].id = Date.now(); // invoice number ko hi id bnade kya??
+      // Set a new ID for the saved invoice
+      state.invoices[state.invoiceCount] = state.invoices[state.invoiceCount] || initialInvoice;
+      state.invoices[state.invoiceCount].id = Date.now(); // invoice number ko hi id bnade kya??
 
-        // Create a new empty invoice object
-        const newEmptyInvoice = {
-          ...initialInvoice,
-          invoiceNumber: state.invoices[state.invoiceCount].invoiceNumber + 1,
-        }
+      // Create a new empty invoice object
+      const newEmptyInvoice = {
+        ...initialInvoice,
+        invoiceNumber: state.invoices[state.invoiceCount].invoiceNumber + 1,
+      }
 
-        // push into local storage
-        localStorage.setItem('invoiceState',JSON.stringify(state))
+      // push into local storage
+      localStorage.setItem('invoiceState', JSON.stringify(state))
+      saveToDB(JSON.stringify(state))
 
-        // empty ko push krdia
-        state.invoices.push(newEmptyInvoice);
-        
-        // Increment the invoice count for the next invoice
-        state.invoiceCount++;
+      // empty ko push krdia
+      state.invoices.push(newEmptyInvoice);
+
+      // Increment the invoice count for the next invoice
+      state.invoiceCount++;
     },
   },
 });
+async function saveToDB(dataToStore){
+  try {
+    let response = await fetch('http://localhost:5000/invoice/create', {
+      method: 'POST',
+      body: dataToStore
+    })
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 export const {
   checkCurrency,
   editFieldReducer,

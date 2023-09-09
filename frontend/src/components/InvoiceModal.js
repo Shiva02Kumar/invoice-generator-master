@@ -50,10 +50,28 @@ const GenerateInvoice = (props) => {
       progress: undefined,
       theme: "colored",
     });
+    console.log(props)
     dispatch(modalReducer({ isOpen: false,invoiceFormId : props.invoiceFormId }));
     dispatch(saveInvoiceReducer());
     dispatch(editInvoiceReducer(null));
+    console.log(JSON.stringify(props.info)); 
+    console.log(typeof(JSON.stringify(props.info))); 
+    // saveToDB(JSON.stringify(props.info))
     props.closeModal();
+  }
+
+  async function saveToDB(dataToStore){
+    try {
+      let response = await fetch('http://localhost:5000/invoice/create', {
+        method: 'POST',
+        body: dataToStore
+      })
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   return (

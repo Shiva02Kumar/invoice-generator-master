@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Typography, Box, IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -12,12 +12,50 @@ import {
 } from "../store/slices/InvoiceSliceReducer";
 import InvoiceModal from "./InvoiceModal";
 import InvoiceForm from "./InvoiceForm";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Bills = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const { invoices } = useSelector((state) => state.InvoiceSlice);
+  
+  // async function getInvoicesDB(){
+  //   await fetch("http://localhost:5000/invoice", {
+  //     method: "GET"
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setResponseData(data))
+  //     .catch((error) => console.error('Error:', error));
+  // }
+  
+  const [responseData, setResponseData] = useState();
+  // const invoices = responseData;
+
+  useEffect(() => {
+    // Define the async function inside the useEffect
+    async function getInvoicesDB() {
+      try {
+        const response = await fetch("http://localhost:5000/invoice", {
+          method: "GET"
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(typeof(data.dataFromDB[1]))
+        console.log(data.dataFromDB)
+        setResponseData(data.dataFromDB);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    
+    // Call the async function
+    getInvoicesDB();
+  }, []); 
+
+  // const [responseData, setResponseData] = useState(null);
+
 
   const [selectedViewInvoiceId, setSelectedViewInvoiceId] = useState(null);
 
@@ -32,6 +70,7 @@ const Bills = () => {
   const handleEditInvoice = (invoiceId) => {
     navigate(`/invoice/edit/${invoiceId}`);
   };
+
 
   return (
     <>
