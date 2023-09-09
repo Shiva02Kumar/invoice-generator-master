@@ -121,14 +121,14 @@ const InvoiceSlice = createSlice({
           invoiceNumber: state.invoices[state.invoiceCount].invoiceNumber + 1,
         }
 
+        // push into local storage
+        localStorage.setItem('invoiceState',JSON.stringify(state))
+
         // empty ko push krdia
         state.invoices.push(newEmptyInvoice);
-
+        
         // Increment the invoice count for the next invoice
         state.invoiceCount++;
-
-      // push into local storage
-      localStorage.setItem('invoiceState',JSON.stringify(state))
     },
   },
 });
