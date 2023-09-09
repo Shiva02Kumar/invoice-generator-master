@@ -54,9 +54,12 @@ const GenerateInvoice = (props) => {
     dispatch(modalReducer({ isOpen: false,invoiceFormId : props.invoiceFormId }));
     dispatch(saveInvoiceReducer());
     dispatch(editInvoiceReducer(null));
-    console.log(JSON.stringify(props.info)); 
-    console.log(typeof(JSON.stringify(props.info))); 
-    // saveToDB(JSON.stringify(props.info))
+    console.log(props.info); // {"id":1694278212303,"isOpen":true,"currency":"$","currentDate":"","invoiceNumber":2,"dateOfIssue":"2023-09-06","billTo":"hel","billToEmail":"sad@gmnk","billToAddress":"a dwdsfas","billFrom":"fei","billFromEmail":"adw@gmail","billFromAddress":"adw dw","notes":"","total":"1.00","subTotal":"1.00","taxRate":"","taxAmount":"0.00","discountRate":"","discountAmount":"0.00","items":[{"id":0,"name":"Shiva Kumar","description":"help","price":"1.00","quantity":1}]}
+    // console.log(typeof(JSON.stringify(props.info))); // string
+
+    console.log(typeof(props.info));
+    
+    saveToDB(props.info);
     props.closeModal();
   }
 

@@ -3,6 +3,20 @@ import { initialInvoice } from "./constant"
 import { json } from "react-router-dom";
 
 
+async function saveToDB(dataToStore){
+  try {
+    let response = await fetch('http://localhost:5000/invoice/create', {
+      method: 'POST',
+      body: dataToStore
+    })
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
 const InvoiceSlice = createSlice({
   name: "invoiceSlice",
   initialState: {
@@ -10,6 +24,8 @@ const InvoiceSlice = createSlice({
     invoiceCount: 0,
     EditThisInvoice: null
   },
+
+  
 
   reducers: {
     checkCurrency: (state, action) => {
@@ -127,7 +143,8 @@ const InvoiceSlice = createSlice({
 
       // push into local storage
       localStorage.setItem('invoiceState', JSON.stringify(state))
-      saveToDB(JSON.stringify(state))
+      console.log(state);
+      //saveToDB(JSON.stringify(state))
 
       // empty ko push krdia
       state.invoices.push(newEmptyInvoice);
@@ -137,19 +154,7 @@ const InvoiceSlice = createSlice({
     },
   },
 });
-async function saveToDB(dataToStore){
-  try {
-    let response = await fetch('http://localhost:5000/invoice/create', {
-      method: 'POST',
-      body: dataToStore
-    })
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
+
 export const {
   checkCurrency,
   editFieldReducer,
