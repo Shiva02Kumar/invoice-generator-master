@@ -3,20 +3,21 @@ const invoiceModel = require('../Models/InvoiceModel')
 async function allInvoices(req, res) {
     try {
         let invoices = await invoiceModel.find()
+        console.log(invoices);
         if (invoices) {
             res.json({
                 message: "found invoices",
-                data: invoices
+                dataFromDB: invoices
             })
         }
         else {
             res.json({
                 message: "no invoices found",
-                data: invoice
+                data: invoices
             })
         }
     } catch (error) {
-        res.json({
+        res.status(404).json({
             error: error.message
         })
     }
