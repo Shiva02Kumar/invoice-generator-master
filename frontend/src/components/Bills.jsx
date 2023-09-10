@@ -13,12 +13,14 @@ import {
 import InvoiceModal from "./InvoiceModal";
 import InvoiceForm from "./InvoiceForm";
 import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios'
+
 const Bills = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const { invoices } = useSelector((state) => state.InvoiceSlice);
-  
+
   // async function getInvoicesDB(){
   //   await fetch("http://localhost:5000/invoice", {
   //     method: "GET"
@@ -27,7 +29,7 @@ const Bills = () => {
   //     .then((data) => setResponseData(data))
   //     .catch((error) => console.error('Error:', error));
   // }
-  
+
   const [responseData, setResponseData] = useState();
   // const invoices = responseData;
 
@@ -35,24 +37,34 @@ const Bills = () => {
     // Define the async function inside the useEffect
     async function getInvoicesDB() {
       try {
-        const response = await fetch("http://localhost:5000/invoice", {
-          method: "GET"
-        });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log(typeof(data.dataFromDB[1]))
-        console.log(data.dataFromDB)
-        setResponseData(data.dataFromDB);
+        // const response = await fetch("http://localhost:5000/invoice", {
+        //   method: "GET"
+        // });
+        // if (!response.ok) {
+        //   throw new Error('Network response was not ok');
+        // }
+        // const data = await response.json();
+        const response = await axios.get('http://localhost:5000/invoice')
+          .then((response) => {
+            const data = response.data;
+            console.log(data);
+            console.log(typeof(data));
+            console.log(data.dataFromDB);
+            console.log(typeof(data.dataFromDB));
+            console.log(invoices)
+            setResponseData(data.dataFromDB);
+          })
+          .catch((error) => console.error('Error:', error));
+        // console.log(typeof (data.dataFromDB[1]))
+        // console.log(data.dataFromDB)
       } catch (error) {
         console.error('Error:', error);
       }
     }
-    
+
     // Call the async function
     getInvoicesDB();
-  }, []); 
+  }, []);
 
   // const [responseData, setResponseData] = useState(null);
 
@@ -77,7 +89,7 @@ const Bills = () => {
       <Container sx={{ backgroundColor: "white", marginTop: "10px" }}>
         <Typography align="center">LIST OF INVOICES</Typography>
         <>
-          {invoices.map((ele) => {
+          {responseData.map((ele) => {
             return (
               ele.id && (
                 <Box
